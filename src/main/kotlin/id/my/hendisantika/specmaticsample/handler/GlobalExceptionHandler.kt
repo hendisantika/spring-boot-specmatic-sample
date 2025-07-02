@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.ErrorResponse
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import java.time.LocalDateTime
 
 /**
  * Created by IntelliJ IDEA.
@@ -43,6 +44,20 @@ class GlobalExceptionHandler {
                 "An error occurred while processing the request",
                 "Unknown error"
             )
+        )
+    }
+
+    private fun errorResponse(
+        httpStatus: HttpStatus,
+        ex: Exception,
+        error: String,
+        message: String
+    ): ErrorResponse {
+        return ErrorResponse(
+            LocalDateTime.now(),
+            httpStatus.value(),
+            error,
+            ex.message ?: message
         )
     }
 }
