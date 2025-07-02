@@ -32,4 +32,17 @@ class GlobalExceptionHandler {
             )
         )
     }
+
+    @ExceptionHandler(Exception::class)
+    fun handleGenericException(ex: Exception): ResponseEntity<ErrorResponse> {
+        val badRequest = HttpStatus.BAD_REQUEST
+        return ResponseEntity.status(badRequest).body(
+            errorResponse(
+                badRequest,
+                ex,
+                "An error occurred while processing the request",
+                "Unknown error"
+            )
+        )
+    }
 }
