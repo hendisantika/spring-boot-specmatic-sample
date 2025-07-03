@@ -4,6 +4,7 @@ import id.my.hendisantika.specmaticsample.exception.ValidationException
 import id.my.hendisantika.specmaticsample.model.DB
 import id.my.hendisantika.specmaticsample.model.Id
 import id.my.hendisantika.specmaticsample.model.Order
+import id.my.hendisantika.specmaticsample.model.OrderStatus
 import org.springframework.stereotype.Service
 
 /**
@@ -37,5 +38,9 @@ class OrderService {
         if (order.id == 0)
             throw ValidationException("Product id cannot be null")
         DB.updateOrder(order)
+    }
+
+    fun findOrders(status: OrderStatus?, productid: Int?): List<Order> {
+        return DB.findOrders(status, productid)
     }
 }

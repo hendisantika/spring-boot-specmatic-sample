@@ -2,16 +2,6 @@ package id.my.hendisantika.specmaticsample.model
 
 import id.my.hendisantika.specmaticsample.exception.UnrecognizedTypeException
 import id.my.hendisantika.specmaticsample.exception.ValidationException
-import org.springframework.core.annotation.Order
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.contains
-import kotlin.collections.count
-import kotlin.collections.filter
-import kotlin.collections.toList
-import kotlin.sequences.toList
-import kotlin.text.toList
-import kotlin.toList
 
 /**
  * Created by IntelliJ IDEA.
