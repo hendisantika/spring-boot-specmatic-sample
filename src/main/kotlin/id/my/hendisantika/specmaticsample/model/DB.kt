@@ -1,5 +1,7 @@
 package id.my.hendisantika.specmaticsample.model
 
+import org.springframework.core.annotation.Order
+
 /**
  * Created by IntelliJ IDEA.
  * Project : spring-boot-specmatic-sample
@@ -18,4 +20,11 @@ object DB {
             20 to Product("Gemini", "dog", 10, 20),
             30 to Product("Cleaner", "gadget", 10, 30)
         )
+
+    private var PRODUCT_IMAGE: MutableMap<Int, String> =
+        mutableMapOf(10 to "https://example.com/image.jpg", 20 to "https://example.com/image.jpg")
+    private var ORDERS: MutableMap<Int, Order> =
+        mutableMapOf(10 to Order(10, 2, OrderStatus.pending, 10), 20 to Order(10, 1, OrderStatus.pending, 20))
+    private val USERS: Map<String, User> = mapOf("API-TOKEN-SPEC" to User("Hari"))
+
 }
