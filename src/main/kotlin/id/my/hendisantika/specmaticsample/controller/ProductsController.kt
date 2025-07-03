@@ -68,4 +68,17 @@ class ProductsController {
         productService.deleteProduct(id)
         return ResponseEntity(HttpStatus.OK)
     }
+
+    @GetMapping("/products")
+    fun search(
+        @RequestParam(name = "name", required = false) name: String?,
+        @RequestParam(name = "type", required = false) type: String?,
+        @RequestParam(name = "status", required = false) status: String?
+    ): ResponseEntity<List<Product>> {
+        // An exception thrown by some internal bug...
+        if (name == "unknown")
+            return ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+        val products = productService.findProducts(name, type, status)
+        return ResponseEntity(products, HttpStatus.OK)
+    }
 }
