@@ -62,4 +62,10 @@ class ProductsController {
         })
         return ResponseEntity(productId, HttpStatus.OK)
     }
+
+    @DeleteMapping("/products/{id}")
+    fun delete(@PathVariable("id") id: Int, @AuthenticationPrincipal user: User): ResponseEntity<String> {
+        productService.deleteProduct(id)
+        return ResponseEntity(HttpStatus.OK)
+    }
 }
