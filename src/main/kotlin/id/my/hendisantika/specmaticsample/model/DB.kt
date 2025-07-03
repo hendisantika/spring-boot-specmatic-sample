@@ -53,4 +53,9 @@ object DB {
             Product(update.name, update.type, update.inventory)
         }
     }
+
+    fun deleteProduct(id: Int) {
+        PRODUCTS.remove(id)
+    }
+
 }
