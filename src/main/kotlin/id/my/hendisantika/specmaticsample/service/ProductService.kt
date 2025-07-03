@@ -1,6 +1,7 @@
 package id.my.hendisantika.specmaticsample.service
 
 import id.my.hendisantika.specmaticsample.exception.ValidationException
+import id.my.hendisantika.specmaticsample.filestorage.LocalFileSystem
 import id.my.hendisantika.specmaticsample.model.DB
 import id.my.hendisantika.specmaticsample.model.Id
 import id.my.hendisantika.specmaticsample.model.Product
@@ -42,4 +43,8 @@ class ProductService {
         return DB.findProducts(name, type, status)
     }
 
+    fun addImage(id: Int, imageFileName: String, bytes: ByteArray) {
+        val canonicalImageFilePath = LocalFileSystem.saveImage(imageFileName, bytes)
+        DB.updateProductImage(id, canonicalImageFilePath)
+    }
 }
