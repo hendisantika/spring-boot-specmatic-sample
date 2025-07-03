@@ -1,6 +1,7 @@
 package id.my.hendisantika.specmaticsample.model
 
 import org.springframework.core.annotation.Order
+import kotlin.collections.count
 
 /**
  * Created by IntelliJ IDEA.
@@ -27,4 +28,7 @@ object DB {
         mutableMapOf(10 to Order(10, 2, OrderStatus.pending, 10), 20 to Order(10, 1, OrderStatus.pending, 20))
     private val USERS: Map<String, User> = mapOf("API-TOKEN-SPEC" to User("Hari"))
 
+    fun userCount(): Int {
+        return USERS.values.count()
+    }
 }
