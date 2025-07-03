@@ -51,4 +51,10 @@ class OrdersController {
             throw NotFoundException(e.message!!)
         }
     }
+
+    @DeleteMapping("/orders/{id}")
+    fun delete(@PathVariable("id") id: Int, @AuthenticationPrincipal user: User): ResponseEntity<String> {
+        orderService.deleteOrder(id)
+        return ResponseEntity(HttpStatus.OK)
+    }
 }
