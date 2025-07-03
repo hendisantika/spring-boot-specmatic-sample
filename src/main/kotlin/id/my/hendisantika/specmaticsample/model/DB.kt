@@ -44,4 +44,6 @@ object DB {
     fun addProduct(product: Product) {
         PRODUCTS[product.id] = product
     }
+
+    fun findProduct(id: Int): Product = PRODUCTS.getValue(id)
 }
