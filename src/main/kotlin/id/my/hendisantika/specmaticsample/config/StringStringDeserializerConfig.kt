@@ -1,6 +1,7 @@
 package id.my.hendisantika.specmaticsample.config
 
 import com.fasterxml.jackson.databind.module.SimpleModule
+import id.my.hendisantika.specmaticsample.model.StrictStringDeserializer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

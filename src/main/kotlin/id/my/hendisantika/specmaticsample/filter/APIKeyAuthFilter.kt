@@ -1,7 +1,8 @@
 package id.my.hendisantika.specmaticsample.filter
 
+import id.my.hendisantika.specmaticsample.model.DB
+import id.my.hendisantika.specmaticsample.model.User
 import jakarta.servlet.http.HttpServletRequest
-import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter
 
 /**
