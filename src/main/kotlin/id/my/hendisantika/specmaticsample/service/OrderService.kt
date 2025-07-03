@@ -1,5 +1,6 @@
 package id.my.hendisantika.specmaticsample.service
 
+import id.my.hendisantika.specmaticsample.exception.ValidationException
 import id.my.hendisantika.specmaticsample.model.DB
 import id.my.hendisantika.specmaticsample.model.Id
 import id.my.hendisantika.specmaticsample.model.Order
@@ -30,5 +31,11 @@ class OrderService {
 
     fun deleteOrder(id: Int) {
         DB.deleteOrder(id)
+    }
+
+    fun updateOrder(order: Order) {
+        if (order.id == 0)
+            throw ValidationException("Product id cannot be null")
+        DB.updateOrder(order)
     }
 }
