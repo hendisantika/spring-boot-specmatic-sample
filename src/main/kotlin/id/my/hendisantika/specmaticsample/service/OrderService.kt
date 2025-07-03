@@ -23,4 +23,8 @@ class OrderService {
         DB.addOrder(order)
         return Id(order.id)
     }
+
+    fun getOrder(id: Int): Order {
+        return DB.getOrder(id)
+    }
 }
