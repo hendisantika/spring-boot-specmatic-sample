@@ -1,5 +1,6 @@
 package id.my.hendisantika.specmaticsample.controller
 
+import id.my.hendisantika.specmaticsample.exception.NotFoundException
 import id.my.hendisantika.specmaticsample.model.Id
 import id.my.hendisantika.specmaticsample.model.Order
 import id.my.hendisantika.specmaticsample.model.User
@@ -9,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 /**
  * Created by IntelliJ IDEA.
@@ -42,5 +41,14 @@ class OrdersController {
     ): ResponseEntity<List<Id>> {
         val orderIds = orders.map { orderService.createOrder(it) }
         return ResponseEntity(orderIds, HttpStatus.OK)
+    }
+
+    @GetMapping("/orders/{id}")
+    fun get(@PathVariable("id") id: Int): Order {
+        try {
+            return orderService.getOrder(id)
+        } catch (e: NoSuchElementException) {
+            throw NotFoundException(e.message!!)
+        }
     }
 }
