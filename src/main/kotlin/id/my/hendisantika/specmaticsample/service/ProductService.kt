@@ -37,4 +37,9 @@ class ProductService {
     fun deleteProduct(id: Int) {
         DB.deleteProduct(id)
     }
+
+    fun findProducts(name: String?, type: String?, status: String?): List<Product> {
+        return DB.findProducts(name, type, status)
+    }
+
 }
