@@ -1,9 +1,11 @@
 package id.my.hendisantika.specmaticsample.model
 
 import id.my.hendisantika.specmaticsample.exception.UnrecognizedTypeException
+import id.my.hendisantika.specmaticsample.exception.ValidationException
 import org.springframework.core.annotation.Order
 import kotlin.collections.component1
 import kotlin.collections.component2
+import kotlin.collections.contains
 import kotlin.collections.count
 import kotlin.collections.filter
 import kotlin.collections.toList
@@ -100,5 +102,15 @@ object DB {
 
     fun updateOrder(updatedOrder: Order) {
         ORDERS[updatedOrder.id] = updatedOrder
+    }
+
+    fun reserveProductInventory(productId: Int, count: Int) {
+        if (productId !in PRODUCTS)
+            throw ValidationException("Product Id $productId does not exist")
+        val updatedProduct = PRODUCTS.getValue(productId).let {
+            it.copy(inventory = it.inventory - count)
+        }
+
+        PRODUCTS[productId] = updatedProduct
     }
 }
