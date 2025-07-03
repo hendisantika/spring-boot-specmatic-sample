@@ -27,4 +27,8 @@ class OrderService {
     fun getOrder(id: Int): Order {
         return DB.getOrder(id)
     }
+
+    fun deleteOrder(id: Int) {
+        DB.deleteOrder(id)
+    }
 }
