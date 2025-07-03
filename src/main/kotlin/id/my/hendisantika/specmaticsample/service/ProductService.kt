@@ -34,4 +34,7 @@ class ProductService {
         return Id(product.id)
     }
 
+    fun deleteProduct(id: Int) {
+        DB.deleteProduct(id)
+    }
 }
