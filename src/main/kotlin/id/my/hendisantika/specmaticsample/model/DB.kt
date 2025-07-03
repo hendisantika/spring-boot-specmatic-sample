@@ -94,4 +94,8 @@ object DB {
 
     fun getOrder(id: Int): Order = ORDERS.getValue(id)
 
+    fun deleteOrder(id: Int) {
+        ORDERS.remove(id)
+    }
+
 }
