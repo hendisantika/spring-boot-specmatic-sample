@@ -2,6 +2,7 @@ package id.my.hendisantika.specmaticsample.service
 
 import id.my.hendisantika.specmaticsample.exception.ValidationException
 import id.my.hendisantika.specmaticsample.model.DB
+import id.my.hendisantika.specmaticsample.model.Id
 import id.my.hendisantika.specmaticsample.model.Product
 import org.springframework.stereotype.Service
 
@@ -27,4 +28,10 @@ class ProductService {
             throw ValidationException("Product id cannot be null")
         DB.updateProduct(product)
     }
+
+    fun addProduct(product: Product): Id {
+        DB.addProduct(product)
+        return Id(product.id)
+    }
+
 }
