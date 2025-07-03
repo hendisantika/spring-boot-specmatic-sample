@@ -1,5 +1,7 @@
 package id.my.hendisantika.specmaticsample.service
 
+import id.my.hendisantika.specmaticsample.model.DB
+import id.my.hendisantika.specmaticsample.model.Product
 import org.springframework.stereotype.Service
 
 /**
@@ -14,4 +16,8 @@ import org.springframework.stereotype.Service
  * To change this template use File | Settings | File Templates.
  */
 @Service
-class ProductService
+class ProductService {
+    fun getProduct(id: Int): Product {
+        return DB.findProduct(id)
+    }
+}
