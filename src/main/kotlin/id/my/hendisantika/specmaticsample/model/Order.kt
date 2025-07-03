@@ -1,5 +1,6 @@
 package id.my.hendisantika.specmaticsample.model
 
+import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Positive
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -23,4 +24,10 @@ class Order(
     companion object {
         val idGenerator: AtomicInteger = AtomicInteger(1)
     }
+}
+
+enum class OrderStatus {
+    pending,
+    fulfilled,
+    cancelled
 }
