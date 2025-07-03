@@ -113,4 +113,8 @@ object DB {
 
         PRODUCTS[productId] = updatedProduct
     }
+
+    fun updateProductImage(id: Int, imageFileName: String) {
+        PRODUCT_IMAGE[id] = imageFileName
+    }
 }
