@@ -40,4 +40,8 @@ object DB {
         )
         ORDERS = mutableMapOf(10 to Order(10, 2, OrderStatus.pending, 10), 20 to Order(10, 1, OrderStatus.pending, 20))
     }
+
+    fun addProduct(product: Product) {
+        PRODUCTS[product.id] = product
+    }
 }
