@@ -87,4 +87,9 @@ object DB {
             else -> "available"
         }
     }
+
+    fun addOrder(order: Order) {
+        ORDERS[order.id] = order
+    }
+
 }
