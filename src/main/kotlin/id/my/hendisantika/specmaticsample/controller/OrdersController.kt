@@ -3,6 +3,7 @@ package id.my.hendisantika.specmaticsample.controller
 import id.my.hendisantika.specmaticsample.exception.NotFoundException
 import id.my.hendisantika.specmaticsample.model.Id
 import id.my.hendisantika.specmaticsample.model.Order
+import id.my.hendisantika.specmaticsample.model.OrderStatus
 import id.my.hendisantika.specmaticsample.model.User
 import id.my.hendisantika.specmaticsample.service.OrderService
 import jakarta.validation.Valid
@@ -68,4 +69,10 @@ class OrdersController {
         orderService.updateOrder(order)
         return ResponseEntity(HttpStatus.OK)
     }
+
+    @GetMapping("/orders")
+    fun search(
+        @RequestParam(name = "status", required = false) status: OrderStatus?,
+        @RequestParam(name = "productid", required = false) productid: Int?
+    ): List<Order> = orderService.findOrders(status, productid)
 }
