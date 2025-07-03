@@ -2,18 +2,10 @@ package id.my.hendisantika.specmaticsample.model
 
 import id.my.hendisantika.specmaticsample.exception.UnrecognizedTypeException
 import org.springframework.core.annotation.Order
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.MutableMap
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.count
 import kotlin.collections.filter
-import kotlin.collections.getValue
-import kotlin.collections.listOf
-import kotlin.collections.mapOf
-import kotlin.collections.mutableMapOf
-import kotlin.collections.set
 import kotlin.collections.toList
 import kotlin.sequences.toList
 import kotlin.text.toList
@@ -104,5 +96,9 @@ object DB {
         return ORDERS.filter { (_, order) ->
             order.status == status || order.productid == productId
         }.values.toList()
+    }
+
+    fun updateOrder(updatedOrder: Order) {
+        ORDERS[updatedOrder.id] = updatedOrder
     }
 }
