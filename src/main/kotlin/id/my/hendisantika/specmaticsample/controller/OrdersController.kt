@@ -57,4 +57,15 @@ class OrdersController {
         orderService.deleteOrder(id)
         return ResponseEntity(HttpStatus.OK)
     }
+
+    @PostMapping("/orders/{id}")
+    fun update(
+        @PathVariable("id") id: Int,
+        @Valid @RequestBody order: Order,
+        @AuthenticationPrincipal user: User
+    ): ResponseEntity<String> {
+        println(order.status.toString())
+        orderService.updateOrder(order)
+        return ResponseEntity(HttpStatus.OK)
+    }
 }
