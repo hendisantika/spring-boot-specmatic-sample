@@ -2,8 +2,6 @@ package id.my.hendisantika.specmaticsample.model
 
 import id.my.hendisantika.specmaticsample.exception.UnrecognizedTypeException
 import org.springframework.core.annotation.Order
-import kotlin.Int
-import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.Map
 import kotlin.collections.MutableMap
@@ -15,10 +13,8 @@ import kotlin.collections.mapOf
 import kotlin.collections.mutableMapOf
 import kotlin.collections.set
 import kotlin.collections.toList
-import kotlin.run
 import kotlin.sequences.toList
 import kotlin.text.toList
-import kotlin.to
 import kotlin.toList
 
 /**
@@ -85,4 +81,10 @@ object DB {
         }.values.toList()
     }
 
+    private fun inventoryStatus(productid: Int): String {
+        return when (PRODUCTS.getValue(productid).inventory) {
+            0 -> "sold"
+            else -> "available"
+        }
+    }
 }
