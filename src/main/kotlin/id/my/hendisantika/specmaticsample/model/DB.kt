@@ -5,6 +5,8 @@ import org.springframework.core.annotation.Order
 import kotlin.collections.List
 import kotlin.collections.Map
 import kotlin.collections.MutableMap
+import kotlin.collections.component1
+import kotlin.collections.component2
 import kotlin.collections.count
 import kotlin.collections.filter
 import kotlin.collections.getValue
@@ -98,4 +100,9 @@ object DB {
         ORDERS.remove(id)
     }
 
+    fun findOrders(status: OrderStatus?, productId: Int?): List<Order> {
+        return ORDERS.filter { (_, order) ->
+            order.status == status || order.productid == productId
+        }.values.toList()
+    }
 }
