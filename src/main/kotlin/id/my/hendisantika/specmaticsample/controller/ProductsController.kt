@@ -2,6 +2,7 @@ package id.my.hendisantika.specmaticsample.controller
 
 import id.my.hendisantika.specmaticsample.exception.NotFoundException
 import id.my.hendisantika.specmaticsample.exception.ValidationException
+import id.my.hendisantika.specmaticsample.model.Id
 import id.my.hendisantika.specmaticsample.model.Product
 import id.my.hendisantika.specmaticsample.model.User
 import id.my.hendisantika.specmaticsample.service.ProductService
@@ -51,5 +52,14 @@ class ProductsController {
         } catch (e: NoSuchElementException) {
             throw NotFoundException(e.message!!)
         }
+    }
+
+    @PostMapping("/products")
+    fun create(@Valid @RequestBody newProduct: Product, @AuthenticationPrincipal user: User): ResponseEntity<Id> {
+        val productId = productService.addProduct(newProduct.also {
+            if (newProduct.type !in typesOfProducts)
+                throw ValidationException("type must be one of ${typesOfProducts.joinToString(", ")}")
+        })
+        return ResponseEntity(productId, HttpStatus.OK)
     }
 }
