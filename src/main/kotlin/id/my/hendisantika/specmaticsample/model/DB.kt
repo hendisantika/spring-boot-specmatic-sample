@@ -92,4 +92,6 @@ object DB {
         ORDERS[order.id] = order
     }
 
+    fun getOrder(id: Int): Order = ORDERS.getValue(id)
+
 }
