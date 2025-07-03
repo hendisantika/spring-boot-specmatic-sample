@@ -1,5 +1,8 @@
 package id.my.hendisantika.specmaticsample.service
 
+import id.my.hendisantika.specmaticsample.model.DB
+import id.my.hendisantika.specmaticsample.model.Id
+import id.my.hendisantika.specmaticsample.model.Order
 import org.springframework.stereotype.Service
 
 /**
@@ -14,4 +17,10 @@ import org.springframework.stereotype.Service
  * To change this template use File | Settings | File Templates.
  */
 @Service
-class OrderService
+class OrderService {
+    fun createOrder(order: Order): Id {
+        DB.reserveProductInventory(order.productid, order.count)
+        DB.addOrder(order)
+        return Id(order.id)
+    }
+}
