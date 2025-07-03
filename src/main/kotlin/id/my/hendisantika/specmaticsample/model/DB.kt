@@ -1,7 +1,25 @@
 package id.my.hendisantika.specmaticsample.model
 
+import id.my.hendisantika.specmaticsample.exception.UnrecognizedTypeException
 import org.springframework.core.annotation.Order
+import kotlin.Int
+import kotlin.String
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.MutableMap
 import kotlin.collections.count
+import kotlin.collections.filter
+import kotlin.collections.getValue
+import kotlin.collections.listOf
+import kotlin.collections.mapOf
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
+import kotlin.collections.toList
+import kotlin.run
+import kotlin.sequences.toList
+import kotlin.text.toList
+import kotlin.to
+import kotlin.toList
 
 /**
  * Created by IntelliJ IDEA.
@@ -56,6 +74,15 @@ object DB {
 
     fun deleteProduct(id: Int) {
         PRODUCTS.remove(id)
+    }
+
+    fun findProducts(name: String?, type: String?, status: String?): List<Product> {
+        if (type != null && type !in listOf("book", "food", "gadget", "other"))
+            throw UnrecognizedTypeException(type)
+
+        return PRODUCTS.filter { (id, product) ->
+            product.name == name || product.type == type || inventoryStatus(id) == status
+        }.values.toList()
     }
 
 }
