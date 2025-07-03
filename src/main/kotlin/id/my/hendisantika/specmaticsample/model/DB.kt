@@ -31,4 +31,13 @@ object DB {
     fun userCount(): Int {
         return USERS.values.count()
     }
+
+    fun resetDB() {
+        PRODUCTS = mutableMapOf(
+            10 to Product("XYZ Phone", "gadget", 10, 10),
+            20 to Product("Gemini", "dog", 10, 20),
+            30 to Product("Cleaner", "gadget", 10, 30)
+        )
+        ORDERS = mutableMapOf(10 to Order(10, 2, OrderStatus.pending, 10), 20 to Order(10, 1, OrderStatus.pending, 20))
+    }
 }
