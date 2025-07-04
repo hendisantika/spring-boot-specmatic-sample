@@ -15,7 +15,7 @@ import java.io.File
  */
 class LocalFileSystem {
     companion object {
-        fun saveImage(imageFileName: String, bytes: ByteArray): String {
+        fun saveImage(imageFileName: String?, bytes: ByteArray): String {
             val file = File(".images/$imageFileName")
             file.parentFile.mkdirs()
             file.writeBytes(bytes)

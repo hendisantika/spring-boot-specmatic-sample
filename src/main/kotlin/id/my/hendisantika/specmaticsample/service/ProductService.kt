@@ -43,7 +43,7 @@ class ProductService {
         return DB.findProducts(name, type, status)
     }
 
-    fun addImage(id: Int, imageFileName: String, bytes: ByteArray) {
+    fun addImage(id: Int, imageFileName: String?, bytes: ByteArray) {
         val canonicalImageFilePath = LocalFileSystem.saveImage(imageFileName, bytes)
         DB.updateProductImage(id, canonicalImageFilePath)
     }
