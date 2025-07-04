@@ -1,10 +1,10 @@
 package id.my.hendisantika.specmaticsample.config
 
-import id.my.hendisantika.specmaticsample.filter.APIKeyAuthFilter
-import id.my.hendisantika.specmaticsample.model.DB
+import id.my.hendisantika.specmaticsample.config.SecurityConfig.Companion.API_TOKEN
+import id.my.hendisantika.specmaticsample.filter.DummyAPIKeyAuthFilter
 import id.my.hendisantika.specmaticsample.security.AuthManager
+import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -18,17 +18,17 @@ import org.springframework.security.web.SecurityFilterChain
  * Link: s.id/hendisantika
  * Email: hendisantika@yahoo.co.id
  * Telegram : @hendisantika34
- * Date: 02/07/25
- * Time: 07.48
+ * Date: 04/07/25
+ * Time: 07.06
  * To change this template use File | Settings | File Templates.
  */
-@Configuration
+@TestConfiguration
 @Order(1)
 @EnableWebSecurity
-class SecurityConfig {
+class TestSecurityConfig {
     @Bean
-    fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        val filter = APIKeyAuthFilter(API_TOKEN, DB)
+    fun testFilterChain(http: HttpSecurity): SecurityFilterChain {
+        val filter = DummyAPIKeyAuthFilter(API_TOKEN)
         filter.setAuthenticationManager(AuthManager())
 
         http
@@ -38,9 +38,5 @@ class SecurityConfig {
             .authorizeHttpRequests { it.anyRequest().authenticated() }
 
         return http.build()
-    }
-
-    companion object {
-        const val API_TOKEN = "authenticate"
     }
 }
