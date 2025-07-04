@@ -1,7 +1,6 @@
 package id.my.hendisantika.specmaticsample;
 
 import id.my.hendisantika.specmaticsample.model.DB;
-import io.ktor.server.application.Application;
 import io.specmatic.test.SpecmaticContractTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -26,14 +25,14 @@ public class ContractTest implements SpecmaticContractTest {
     @BeforeAll
     public static void setUp() {
         System.setProperty("host", "localhost");
-        System.setProperty("port", "8090");
+        System.setProperty("port", "8080");
         System.setProperty("SPECMATIC_GENERATIVE_TESTS", "true");
         System.setProperty("SPECMATIC_TEST_PARALLELISM", "auto");
         System.setProperty("filter", String.format("PATH!=%s", EXCLUDED_ENDPOINTS));
 
         DB.INSTANCE.resetDB();
 
-        context = SpringApplication.run(Application.class);
+        context = SpringApplication.run(SpringBootSpecmaticSampleApplication.class);
     }
 
     @AfterAll
