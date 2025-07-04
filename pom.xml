@@ -17,7 +17,7 @@
         <java.version>21</java.version>
         <maven.compiler>21</maven.compiler>
         <kotlin.version>1.9.25</kotlin.version>
-        <specmatic.version>2.13.1</specmatic.version>
+        <specmatic.version>2.14.3</specmatic.version>
     </properties>
     <dependencies>
         <dependency>
