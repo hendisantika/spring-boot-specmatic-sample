@@ -26,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile
  * Time: 06.07
  * To change this template use File | Settings | File Templates.
  */
+private val typesOfProducts = listOf("gadget", "book", "food", "other")
+
 @RestController
 class ProductsController {
     @Autowired
