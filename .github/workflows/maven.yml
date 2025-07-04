@@ -33,3 +33,80 @@ jobs:
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
       uses: advanced-security/maven-dependency-submission-action@b275d12641ac2d2108b2cbb7598b154ad2f2cee8
+
+    - name: Setup Maven Action
+      uses: s4u/setup-maven-action@v1.18.0
+
+    - name: Build with Maven
+      run: ./mvnw test package jacoco:report -Ptest
+
+    - name: Run Specmatic Insights Github Build Reporter
+      run: |
+        docker run \
+          -v ${{ github.workspace }}:/workspace \
+          specmatic/specmatic-insights-github-build-reporter:latest \
+            --specmatic-insights-host https://insights.specmatic.in \
+            --specmatic-reports-dir /workspace/build/reports/specmatic \
+            --org-id ${{ secrets.SPECMATIC_ORG_ID }} \
+            --branch-name ${{ github.ref_name }} \
+            --repo-name ${{ github.event.repository.name }} \
+            --repo-id ${{ github.repository_id }} \
+            --repo-url ${{ github.event.repository.html_url }}
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: jacoco coverage report
+        path: /home/runner/work/specmatic-order-api/specmatic-order-api/target/site/jacoco
+
+    - name: Upload HTML Test Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.os }}-${{ matrix.java }}-html-report
+        path: build/reports/specmatic/html
+
+    - name: Upload target jar for Docker
+      uses: actions/upload-artifact@v4
+      with:
+        name: jar
+        path: target/*.jar
+
+  docker:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download target jar from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: jar
+          path: target/
+      - name: List files in target directory
+        run: ls -la target/
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Docker Login
+        run: echo ${{ secrets.SPECMATIC_DOCKER_HUB_TOKEN }} | docker login -u ${{ vars.SPECMATIC_DOCKER_HUB_USERNAME }} --password-stdin
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ github.repository }}
+
+      - name: Build and push Docker image (multi-platform)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ${{ github.repository }}:latest
+          labels: ${{ steps.meta.outputs.labels }}
