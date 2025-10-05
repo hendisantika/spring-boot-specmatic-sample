@@ -35,7 +35,7 @@ jobs:
       uses: advanced-security/maven-dependency-submission-action@b275d12641ac2d2108b2cbb7598b154ad2f2cee8
 
     - name: Setup Maven Action
-      uses: s4u/setup-maven-action@v1.18.0
+      uses: s4u/setup-maven-action@v1.19.0
 
     - name: Build with Maven
       run: ./mvnw test package jacoco:report -Ptest
