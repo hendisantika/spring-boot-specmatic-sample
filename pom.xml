@@ -14,8 +14,8 @@
     <name>spring-boot-specmatic-sample</name>
     <description>spring-boot-specmatic-sample</description>
     <properties>
-        <java.version>21</java.version>
-        <maven.compiler>21</maven.compiler>
+        <java.version>25</java.version>
+        <maven.compiler>25</maven.compiler>
         <kotlin.version>2.4.21</kotlin.version>
         <specmatic.version>2.55.3</specmatic.version>
     </properties>

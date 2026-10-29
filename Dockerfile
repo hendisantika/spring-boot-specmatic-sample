@@ -1,4 +1,4 @@
-FROM amazoncorretto:21-alpine3.21
+FROM amazoncorretto:25-alpine
 LABEL authors="hendisantika"
 
 RUN apk add --no-cache git curl bash && \
@@ -10,6 +10,6 @@ WORKDIR /app
 
 EXPOSE 8080
 
-COPY target/specmatic-order-api-1.0-SNAPSHOT.jar /app/order-api.jar
+COPY target/specmatic-sample-0.0.1-SNAPSHOT.jar /app/specmatic-sample.jar
 
-CMD java -jar order-api.jar
+CMD ["java", "-jar", "specmatic-sample.jar"]
