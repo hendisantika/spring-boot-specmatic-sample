@@ -13,100 +13,136 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  JAVA_VERSION: '25'
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      SPECMATIC_ORG_ID: ${{ secrets.SPECMATIC_ORG_ID }}
 
     steps:
-    - uses: actions/checkout@v6
-    - name: Set up JDK 21
-      uses: actions/setup-java@v5
-      with:
-        java-version: '21'
-        distribution: 'temurin'
-        cache: maven
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      - uses: actions/checkout@v7
 
-    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
-    - name: Update dependency graph
-      uses: advanced-security/maven-dependency-submission-action@b275d12641ac2d2108b2cbb7598b154ad2f2cee8
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v6
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: maven
 
-    - name: Setup Maven Action
-      uses: s4u/setup-maven-action@v1.19.0
+      - name: Build, test and generate coverage report
+        run: ./mvnw -B -ntp clean package
 
-    - name: Build with Maven
-      run: ./mvnw test package jacoco:report -Ptest
+      # Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
+      - name: Update dependency graph
+        if: github.event_name == 'push'
+        uses: advanced-security/maven-dependency-submission-action@v6
 
-    - name: Run Specmatic Insights Github Build Reporter
-      run: |
-        docker run \
-          -v ${{ github.workspace }}:/workspace \
-          specmatic/specmatic-insights-github-build-reporter:latest \
-            --specmatic-insights-host https://insights.specmatic.in \
-            --specmatic-reports-dir /workspace/build/reports/specmatic \
-            --org-id ${{ secrets.SPECMATIC_ORG_ID }} \
-            --branch-name ${{ github.ref_name }} \
-            --repo-name ${{ github.event.repository.name }} \
-            --repo-id ${{ github.repository_id }} \
-            --repo-url ${{ github.event.repository.html_url }}
+      - name: Run Specmatic Insights Github Build Reporter
+        if: env.SPECMATIC_ORG_ID != ''
+        run: |
+          docker run \
+            -v ${{ github.workspace }}:/workspace \
+            specmatic/specmatic-insights-github-build-reporter:latest \
+              --specmatic-insights-host https://insights.specmatic.in \
+              --specmatic-reports-dir /workspace/build/reports/specmatic \
+              --org-id "$SPECMATIC_ORG_ID" \
+              --branch-name ${{ github.ref_name }} \
+              --repo-name ${{ github.event.repository.name }} \
+              --repo-id ${{ github.repository_id }} \
+              --repo-url ${{ github.event.repository.html_url }}
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v5
-      with:
-        name: jacoco coverage report
-        path: /home/runner/work/specmatic-order-api/specmatic-order-api/target/site/jacoco
+      - name: Upload JaCoCo coverage report
+        uses: actions/upload-artifact@v7
+        with:
+          name: jacoco-coverage-report
+          path: target/site/jacoco
 
-    - name: Upload HTML Test Report
-      uses: actions/upload-artifact@v5
-      with:
-        name: ${{ matrix.os }}-${{ matrix.java }}-html-report
-        path: build/reports/specmatic/html
+      - name: Upload Specmatic HTML test report
+        uses: actions/upload-artifact@v7
+        with:
+          name: specmatic-html-report
+          path: build/reports/specmatic/html
 
-    - name: Upload target jar for Docker
-      uses: actions/upload-artifact@v5
-      with:
-        name: jar
-        path: target/*.jar
+      - name: Upload target jar for Docker
+        uses: actions/upload-artifact@v7
+        with:
+          name: jar
+          path: target/*.jar
 
   docker:
-    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    env:
+      DOCKER_HUB_USERNAME: ${{ vars.SPECMATIC_DOCKER_HUB_USERNAME }}
+      DOCKER_HUB_TOKEN: ${{ secrets.SPECMATIC_DOCKER_HUB_TOKEN }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Download target jar from build job
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           name: jar
           path: target/
+
       - name: List files in target directory
         run: ls -la target/
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
+
+      # Pushing only happens on main when Docker Hub credentials are configured; otherwise the image is just built
+      - name: Decide whether to push
+        id: push
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" && -n "$DOCKER_HUB_USERNAME" && -n "$DOCKER_HUB_TOKEN" ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Docker Login
-        run: echo ${{ secrets.SPECMATIC_DOCKER_HUB_TOKEN }} | docker login -u ${{ vars.SPECMATIC_DOCKER_HUB_USERNAME }} --password-stdin
+        if: steps.push.outputs.enabled == 'true'
+        uses: docker/login-action@v4
+        with:
+          username: ${{ env.DOCKER_HUB_USERNAME }}
+          password: ${{ env.DOCKER_HUB_TOKEN }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ github.repository }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha
 
       - name: Build and push Docker image (multi-platform)
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
-          push: true
+          push: ${{ steps.push.outputs.enabled == 'true' }}
           platforms: linux/amd64,linux/arm64
-          tags: |
-            ${{ github.repository }}:latest
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
