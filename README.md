@@ -133,7 +133,7 @@ The [GitHub Actions workflow](.github/workflows/maven.yml) runs on every push an
 - **GitHub Actions**, grouped into a single pull request.
 - **Docker** base image (staying on the JDK 25 line).
 
-Commit messages follow Conventional Commits (`build(deps)`, `build(deps-dev)`, `ci(deps)`, `build(docker)`).
+Commit messages follow Conventional Commits (`build(deps): ...`, `build(deps-dev): ...`, `ci(deps): ...`).
 
 ## Configuration
 

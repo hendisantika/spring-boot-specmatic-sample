@@ -12,8 +12,8 @@ updates:
       - dependencies
       - java
     commit-message:
-      prefix: "build(deps)"
-      prefix-development: "build(deps-dev)"
+      prefix: "build"
+      prefix-development: "build"
       include: scope
     groups:
       spring:
@@ -58,7 +58,7 @@ updates:
       - dependencies
       - github_actions
     commit-message:
-      prefix: "ci(deps)"
+      prefix: "ci"
       include: scope
     groups:
       github-actions:
@@ -77,7 +77,7 @@ updates:
       - dependencies
       - docker
     commit-message:
-      prefix: "build(docker)"
+      prefix: "build"
       include: scope
     ignore:
       # Stay on the JDK 25 LTS line; bump the major manually
