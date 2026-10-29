@@ -7,10 +7,79 @@ updates:
       time: '05:00'
       timezone: Asia/Jakarta
     open-pull-requests-limit: 10
-  - package-ecosystem: "github-actions"
+    target-branch: main
+    labels:
+      - dependencies
+      - java
+    commit-message:
+      prefix: "build(deps)"
+      prefix-development: "build(deps-dev)"
+      include: scope
+    groups:
+      spring:
+        patterns:
+          - "org.springframework*"
+          - "org.springdoc*"
+      kotlin:
+        patterns:
+          - "org.jetbrains.kotlin*"
+      jackson:
+        patterns:
+          - "com.fasterxml.jackson*"
+          - "tools.jackson*"
+      testing:
+        patterns:
+          - "io.specmatic*"
+          - "org.junit*"
+          - "org.jacoco*"
+          - "org.apache.maven.plugins:maven-surefire-plugin"
+      maven-plugins:
+        patterns:
+          - "org.apache.maven.plugins*"
+        exclude-patterns:
+          - "org.apache.maven.plugins:maven-surefire-plugin"
+    ignore:
+      # Major framework upgrades need manual migration work
+      - dependency-name: "org.springframework.boot:spring-boot-starter-parent"
+        update-types: [ "version-update:semver-major" ]
+      # jaxb-api is pinned to the javax namespace on purpose (needed by Specmatic)
+      - dependency-name: "javax.xml.bind:jaxb-api"
+        update-types: [ "version-update:semver-major" ]
+
+  - package-ecosystem: github-actions
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: daily
       time: '05:00'
       timezone: Asia/Jakarta
     open-pull-requests-limit: 10
+    target-branch: main
+    labels:
+      - dependencies
+      - github_actions
+    commit-message:
+      prefix: "ci(deps)"
+      include: scope
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: docker
+    directory: "/"
+    schedule:
+      interval: daily
+      time: '05:00'
+      timezone: Asia/Jakarta
+    open-pull-requests-limit: 5
+    target-branch: main
+    labels:
+      - dependencies
+      - docker
+    commit-message:
+      prefix: "build(docker)"
+      include: scope
+    ignore:
+      # Stay on the JDK 25 LTS line; bump the major manually
+      - dependency-name: "amazoncorretto"
+        update-types: [ "version-update:semver-major" ]
