@@ -1,9 +1,8 @@
 package id.my.hendisantika.specmaticsample.model
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.deser.std.StringDeserializer
-import java.io.IOException
+import tools.jackson.core.JsonParser
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.deser.jdk.StringDeserializer
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,7 +16,6 @@ import java.io.IOException
  * To change this template use File | Settings | File Templates.
  */
 class StrictStringDeserializer : StringDeserializer() {
-    @Throws(IOException::class)
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): String? {
         val token = p.currentToken()
         if (token.isBoolean

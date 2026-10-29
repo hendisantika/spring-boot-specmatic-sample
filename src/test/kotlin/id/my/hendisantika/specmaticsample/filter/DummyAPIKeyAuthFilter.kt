@@ -21,7 +21,7 @@ class DummyAPIKeyAuthFilter(private val principalRequestHeader: String) :
         return User("Dummy User")
     }
 
-    override fun getPreAuthenticatedCredentials(request: HttpServletRequest?): Any {
+    override fun getPreAuthenticatedCredentials(request: HttpServletRequest): Any {
         return "N/A"
     }
 }

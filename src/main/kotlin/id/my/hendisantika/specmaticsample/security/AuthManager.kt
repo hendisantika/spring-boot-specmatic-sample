@@ -15,8 +15,8 @@ import org.springframework.security.core.Authentication
  * To change this template use File | Settings | File Templates.
  */
 class AuthManager : AuthenticationManager {
-    override fun authenticate(authentication: Authentication?): Authentication {
-        authentication!!.isAuthenticated = true
+    override fun authenticate(authentication: Authentication): Authentication {
+        authentication.isAuthenticated = true
         return authentication
     }
 }

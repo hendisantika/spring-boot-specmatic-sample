@@ -23,7 +23,7 @@ class APIKeyAuthFilter(private val principalRequestHeader: String, private val d
         return User("user")
     }
 
-    override fun getPreAuthenticatedCredentials(request: HttpServletRequest?): Any {
+    override fun getPreAuthenticatedCredentials(request: HttpServletRequest): Any {
         return User("user")
     }
 }
