@@ -111,7 +111,7 @@ To run the contract tests:
 ```
 
 Specmatic clones the contract repository into `.specmatic/` (git-ignored) and writes its reports to
-`build/reports/specmatic` (HTML report in `build/reports/specmatic/html`). The build fails if API coverage drops below
+`build/reports/specmatic` (HTML report in `build/reports/specmatic/test/html`). The build fails if API coverage drops below
 70%.
 
 ## CI/CD
